@@ -1,17 +1,10 @@
-<html>
+{% extends 'farmers/layout.html' %}
 
-<head>
-    <title>Paddy Broker</title>
-</head>
-
-<body>
-    <h1>Book Ticket</h1>
+{% block content %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit">
     </form>
 
-</body>
-
-</html>
+{% endblock %}

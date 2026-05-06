@@ -1,14 +1,16 @@
-<html>
+{% extends 'farmers/layout.html' %}
 
-<head>
-    <title>
-        paddy broker
-    </title>
-</head>
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="ticket_id" placeholder="Track your ticket">
+        <button type="submit">Track</button>
+    </form>
+    <h2 style="text-align: center; margin-bottom: 20px;">Prority list of Farmers</h2>
+    <ul>
+        {% for farmer in farmers %}
+            <li>{{ farmer.tracking_id }} - {{ farmer.farmer_name }} - {{ farmer.mobile_num }} - {{ farmer.location }} - {{ farmer.paddy_variety }} - {{ farmer.moisture }} - {{ farmer.date_moisture_measured }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 
-<body>
-    <h1>Welcome Farmers</h1>
-    <h2>Prority list of Farmers</h2>
-</body>
-
-</html>
