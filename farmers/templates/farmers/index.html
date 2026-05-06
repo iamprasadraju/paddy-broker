@@ -6,11 +6,54 @@
         <input type="text" name="ticket_id" placeholder="Track your ticket">
         <button type="submit">Track</button>
     </form>
-    <h2 style="text-align: center; margin-bottom: 20px;">Prority list of Farmers</h2>
-    <ul>
-        {% for farmer in farmers %}
-            <li>{{ farmer.tracking_id }} - {{ farmer.farmer_name }} - {{ farmer.mobile_num }} - {{ farmer.location }} - {{ farmer.paddy_variety }} - {{ farmer.moisture }} - {{ farmer.date_moisture_measured }}</li>
-        {% endfor %}
-    </ul>
-{% endblock %}
+    <a href="{% url 'book_ticket' %}">Book Ticket</a>
 
+    <h2 style="text-align: center; margin-bottom: 20px;">Prority list of Farmers</h2>
+    <table>
+        {% if pending_farmers %}
+        <tr>
+            {% for col_name in farmer_metadata %}
+                <th>{{ col_name }}</th>
+            {% endfor %}
+        </tr>
+        {% for farmer in pending_farmers %}
+            <tr>
+                <td>{{ farmer.priority }}</td>
+                <td>{{ farmer.tracking_id }}</td>
+                <td>{{ farmer.farmer_name }}</td>
+                <td>{{ farmer.aadhar_num }}</td>
+                <td>{{ farmer.mobile_num }}</td>
+                <td>{{ farmer.location }}</td>
+                <td>{{ farmer.paddy_variety }}</td>
+                <td>{{ farmer.moisture }}</td>
+                <td>{{ farmer.date_moisture_measured }}</td>
+                <td>{{ farmer.status }}</td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+    <h2 style="text-align: center; margin-bottom: 20px;">Happy Farmers</h2>
+    <table>
+        {% if happy_farmers %}
+        <tr>
+            {% for col_name in farmer_metadata %}
+                <th>{{ col_name }}</th>
+            {% endfor %}
+        </tr>
+        {% for farmer in happy_farmers %}
+            <tr>
+                <td>{{ farmer.priority }}</td>
+                <td>{{ farmer.tracking_id }}</td>
+                <td>{{ farmer.farmer_name }}</td>
+                <td>{{ farmer.aadhar_num }}</td>
+                <td>{{ farmer.mobile_num }}</td>
+                <td>{{ farmer.location }}</td>
+                <td>{{ farmer.paddy_variety }}</td>
+                <td>{{ farmer.moisture }}</td>
+                <td>{{ farmer.date_moisture_measured }}</td>
+                <td>{{ farmer.status }}</td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+{% endblock %}

@@ -11,6 +11,7 @@ class FarmerForm(forms.ModelForm):
         fields = [
             "farmer_name",
             "mobile_num",
+            "aadhar_num",
             "location",
             "paddy_variety",
             "moisture",
