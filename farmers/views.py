@@ -14,7 +14,7 @@ def home(request):
     if request.method == "POST":
         ticket_id = request.POST.get("ticket_id")
         if ticket_id:
-            farmer = FarmerTicket.objects.get(tracking_id=ticket_id) and FarmerConsignmentInfo.objects.get(tracking_id=ticket_id)
+            farmer = FarmerTicket.objects.get(tracking_id=ticket_id)
             return render(request, "farmers/track_ticket.html", {"farmer": farmer}, {"consignment": consignment_info})
     return render(request, "farmers/index.html", {"pending_farmers": farmers.exclude(status=FarmerTicket.Status.TRANSPORTED), "happy_farmers": farmers.filter(status=FarmerTicket.Status.TRANSPORTED), "farmer_metadata": farmer_metadata}) # pending farmers are who status is not TRANSPORTED
 
