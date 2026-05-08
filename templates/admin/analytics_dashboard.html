@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<style>
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-top: 4px solid #79aec8; }
+    .card h3 { margin: 0; color: #666; font-size: 0.9em; text-transform: uppercase; }
+    .card .value { font-size: 1.8em; font-weight: bold; color: #333; margin-top: 10px; }
+    .profit { border-top-color: #417690; }
+</style>
+
+<h1>Business Overview</h1>
+
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>Total Bags (40kg)</h3>
+        <div class="value">{{ stats.total_bags }}</div>
+    </div>
+    <div class="card">
+        <h3>Total Workers Fee</h3>
+        <div class="value">₹{{ stats.worker_fees|floatformat:2 }}</div>
+    </div>
+    <div class="card">
+        <h3>Estimated Revenue</h3>
+        <div class="value">₹{{ stats.revenue|floatformat:2 }}</div>
+    </div>
+    <div class="card profit">
+        <h3>Total Profit</h3>
+        <div class="value" style="color: green;">₹{{ stats.profit|floatformat:2 }}</div>
+    </div>
+</div>
+
+<div class="module">
+    <caption>Recent Activity</caption>
+    <p style="padding: 10px;">This dashboard updates automatically whenever a new consignment is saved.</p>
+</div>
+{% endblock %}
