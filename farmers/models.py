@@ -18,7 +18,7 @@ class FarmerTicket(models.Model):
     mobile_num = models.CharField(max_length=10, verbose_name="Mobile Number")
     aadhar_num = models.CharField(max_length=12, verbose_name="Aadhar Number")
     location = models.CharField(max_length=100, verbose_name="Location")
-    paddy_variety = models.ForeignKey('GovtPaddyRate', on_delete=models.CASCADE, verbose_name="Paddy Variety")
+    paddy_variety = models.ForeignKey('PaddyInfo', on_delete=models.CASCADE, verbose_name="Paddy Variety")
     moisture = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Moisture")
     date_moisture_measured = models.DateField(verbose_name="Date Moisture Measured")
     created_at = models.DateTimeField(auto_now_add=True) 
@@ -32,7 +32,6 @@ class FarmerTicket(models.Model):
 
             # 2. Generate a random unique suffix (e.g., 4 characters)
             unique_suffix = uuid.uuid4().hex[:6].upper()
-            self.created_at = timezone.now()
 
             # 3. Combine them: VIJA-AF32 (if location was Vijayawada)
             self.tracking_id = f"{loc_prefix}-{unique_suffix}"
@@ -47,25 +46,26 @@ class FarmerConsignmentInfo(models.Model):
     # One-to-one relationship with FarmerTicket
     tracking_id = models.OneToOneField(FarmerTicket, on_delete=models.CASCADE, limit_choices_to={'status': FarmerTicket.Status.PACKED})
     num_bags = models.IntegerField(verbose_name="Number of bags (40 kg)")
-    brokerage_per_bag = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Brokerage per bag (75 kg)")
-    total_brokerage = models.DecimalField(max_digits=10, decimal_places=2, editable=False, verbose_name="Total Brokerage (calculated)")
     workers_group = models.ForeignKey('WorkersGroup', on_delete=models.CASCADE, verbose_name="Workers Group", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     vehicle = models.OneToOneField('VehicleInfo', on_delete=models.CASCADE, verbose_name="Vehicle", null=True, blank=True)
     consignment_created_by = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Consignment Created By")
 
+    total_brokerage = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Total Brokerage", default=0)
+
     def save(self, *args, **kwargs):
-        self.total_brokerage = self.num_bags * 40 / 75 * self.brokerage_per_bag
+        if self.workers_group:
+            # We recalculate every time, overwriting any manual input
+            self.total_brokerage = (self.num_bags * 40 / 75) * self.workers_group.worker_group_fee_per_bag
+            
         super().save(*args, **kwargs)
 
-
-class GovtPaddyRate(models.Model):
-    rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Government Rate")
+class PaddyInfo(models.Model):
     paddy_variety = models.CharField(max_length=100, verbose_name="Paddy Variety")
-    created_at = models.DateTimeField(auto_now_add=True)
-    
+    paddy_rate = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Government Rate per 75kg")
+
     def __str__(self):
-        return f"{self.paddy_variety} - {self.rate} per 75kg"
+        return f"{self.paddy_variety} - {self.paddy_rate} per 75kg"
 
 
 class VehicleInfo(models.Model):
@@ -74,8 +74,13 @@ class VehicleInfo(models.Model):
     driver_contact = models.CharField(max_length=100, verbose_name="Driver Contact")
 
 class Workers(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = 'Active', 'Active'
+        INACTIVE = 'Inactive', 'Inactive'
+    
     name = models.CharField(max_length=100, verbose_name="Worker Name")
     mobile_num = models.CharField(max_length=10, verbose_name="Mobile Number")
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -84,7 +89,21 @@ class Workers(models.Model):
 class WorkersGroup(models.Model):
     group_leader = models.ForeignKey('Workers', on_delete=models.CASCADE, verbose_name="Group Leader", related_name='led_groups')
     group_members = models.ManyToManyField('Workers', verbose_name="Group Members", blank=True, related_name='member_of_groups')
+    
+    # when bags are packed and enter by group leader, group revenue is calculated automatically from (worker_group_fee_per_bag * number_of_bags (75kgs))
+    group_revenue = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Group Revenue", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"{self.group_leader.name} - {self.group_members.count()} members"
+
+# class for broker to track whats actually happening whole management (ex: profit, loss, workerspay, etc)
+class AdminSettings(models.Model):
+    workers_group_fee_per_bag = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Workers Group Fee Per Bag", default=0)
+    mill_fee_per_bag = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Mill Fee Per Bag", default=0)
+
+class AdminDashboard(AdminSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "Business Analytics"
+        verbose_name_plural = "Business Analytics"
