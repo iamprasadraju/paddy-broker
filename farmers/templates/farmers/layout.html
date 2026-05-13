@@ -34,22 +34,28 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body class="font-telugu min-h-screen flex flex-col">
-    <nav class="bg-earth-primary text-white border-b-4 border-earth-secondary">
+<nav class="bg-earth-primary text-white border-b-4 border-earth-secondary">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-between h-14">
-                <a href="/" class="text-sm font-medium tracking-wide">వరి మిత్ర 🌾</a>
-                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-1 flex justify-center md:justify-start">
+                    <a href="/" class="text-2xl font-bold tracking-wide">వరి మిత్ర 🌾</a>
+                </div>
+                <div class="hidden md:flex items-center gap-8 text-base font-medium">
                     <a href="/" class="hover:text-earth-accent transition-colors">Home</a>
                     <a href="{% url 'book_ticket' %}" class="hover:text-earth-accent transition-colors">Book Ticket</a>
                 </div>
-                <button id="menu-btn" class="md:hidden p-1 border border-white" aria-label="Toggle menu">
+                <button id="menu-btn" class="md:hidden p-2 border border-white rounded" aria-label="Toggle menu">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-earth-primary border-t border-white/20 text-sm font-medium">
-            <a href="/" class="block px-4 py-2 hover:bg-earth-secondary">Home</a>
-            <a href="{% url 'book_ticket' %}" class="block px-4 py-2 hover:bg-earth-secondary">Book Ticket</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-earth-primary border-t border-white/20">
+            <div class="px-4 py-3">
+                <div class="space-y-2">
+                    <a href="/" class="block px-3 py-2 hover:bg-earth-secondary rounded">Home</a>
+                    <a href="{% url 'book_ticket' %}" class="block px-3 py-2 hover:bg-earth-secondary rounded">Book Ticket</a>
+                </div>
+            </div>
         </div>
     </nav>
 
