@@ -1,9 +1,76 @@
 {% extends 'farmers/layout.html' %}
 
 {% block content %}
+<!--implement qrcode authentication (i.e fetch data from qr code)-->
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+
+<div class="container">
+<h2>Scan Farmer Aadhaar</h2>
+    <div id="reader" style="width: 100%; max-width: 500px; border: 1px solid #ccc;"></div>
+    <hr>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit">
     </form>
+    <script>
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { 
+            fps: 10, 
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0 
+        }
+    );
+
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Scan result: ${decodedText}`);
+
+        try {
+            // 1. Parse the XML string from the Aadhaar QR
+            let parser = new DOMParser();
+            let xmlDoc = parser.parseFromString(decodedText, "text/xml");
+            let data = xmlDoc.getElementsByTagName("PrintLetterBarcodeData")[0];
+
+            if (data) {
+                // 2. Map XML attributes to your form IDs
+                // Note: The ID in your HTML is 'id_aadhar_num', not 'id_aadhaar_number'
+                document.getElementById('id_farmer_name').value = data.getAttribute('name') || "";
+                document.getElementById('id_aadhar_num').value = data.getAttribute('uid') || "";
+                
+                // Location can be 'vtc' (Village), 'dist' (District), or 'loc' (Locality)
+                let locationInfo = data.getAttribute('vtc') || data.getAttribute('dist') || "";
+                document.getElementById('id_location').value = locationInfo;
+
+                // 3. Stop the scanner and provide feedback
+                html5QrcodeScanner.clear();
+                alert("Farmer data captured successfully from QR code!");
+            } else {
+                // This handles cases where the QR might be a "Secure QR" (numeric string)
+                // instead of the old XML format.
+                if (!isNaN(decodedText.charAt(0))) {
+                   alert("New Secure QR detected. These require server-side decoding (zlib) in Django.");
+                } else {
+                   alert("QR scanned, but no Aadhaar data found.");
+                }
+            }
+        } catch (error) {
+            console.error('Error parsing QR code:', error);
+            alert("Failed to parse the QR code. Please ensure it is a valid Aadhaar card.");
+        }
+    }
+
+    function onScanError(errorMessage) {
+        // We leave this empty to avoid flooding the console during active scanning
+    }
+
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+</script>
+<button type="button" onclick="location.reload()">Reset Scanner</button>
+
+</div>
+
+
+
+
 {% endblock %}

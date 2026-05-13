@@ -19,5 +19,9 @@ class FarmerForm(forms.ModelForm):
         ]
         # Keep your date picker widget
         widgets = {
+            "farmer_name": forms.TextInput(attrs={"readonly": "readonly", "placeholder": "Scan Aadhar"}),
+            "aadhar_num": forms.TextInput(attrs={"readonly": "readonly", "placeholder": "Scan Aadhar"}),
+            "location": forms.TextInput(attrs={"readonly": "readonly", "placeholder": "Scan Location"}),
             "date_moisture_measured": forms.DateInput(attrs={"type": "date"}),
         }
+    
