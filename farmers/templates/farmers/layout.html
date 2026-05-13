@@ -1,19 +1,70 @@
 <html>
 <head>
-    <title>paddy broker</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@100..900&display=swap');
-        body {
-            font-family: 'Noto Sans Telugu', sans-serif;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vari Mitra — Paddy Broker{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        earth: {
+                            bg: '#FAF8F5',
+                            text: '#2D2A26',
+                            border: '#D4C5B5',
+                            primary: '#8B4513',
+                            secondary: '#556B2F',
+                            accent: '#C4A77D',
+                        }
+                    },
+                    fontFamily: { telugu: ['Noto Sans Telugu', 'sans-serif'] },
+                    borderRadius: { DEFAULT: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px', '2xl': '0px' },
+                    boxShadow: { DEFAULT: 'none', sm: 'none', md: 'none', lg: 'none', xl: 'none' }
+                }
+            }
         }
-        table, th, td { border: 1px solid black; border-collapse: collapse; }
-        
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #FAF8F5; color: #2D2A26; }
+        * { border-radius: 0 !important; box-shadow: none !important; }
+        input, button, select, textarea { border-radius: 0 !important; }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body>
-     <h1 style="color: green; position: fixed; top: 0; left: 30px;">వరి మిత్ర 🌾</h1>
-    
-    {% block content %}
-    {% endblock %}
+<body class="font-telugu min-h-screen flex flex-col">
+    <nav class="bg-earth-primary text-white border-b-4 border-earth-secondary">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-14">
+                <a href="/" class="text-sm font-medium tracking-wide">వరి మిత్ర 🌾</a>
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="/" class="hover:text-earth-accent transition-colors">Home</a>
+                    <a href="{% url 'book_ticket' %}" class="hover:text-earth-accent transition-colors">Book Ticket</a>
+                </div>
+                <button id="menu-btn" class="md:hidden p-1 border border-white" aria-label="Toggle menu">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-earth-primary border-t border-white/20 text-sm font-medium">
+            <a href="/" class="block px-4 py-2 hover:bg-earth-secondary">Home</a>
+            <a href="{% url 'book_ticket' %}" class="block px-4 py-2 hover:bg-earth-secondary">Book Ticket</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-earth-primary text-white text-center py-3 text-xs md:text-sm border-t-4 border-earth-secondary">
+        <p>&copy; 2026 Vari Mitra — Developed by Prasad Raju</p>
+    </footer>
+
+    <script>
+        document.getElementById('menu-btn')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

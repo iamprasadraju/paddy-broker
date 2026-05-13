@@ -102,6 +102,9 @@ class AdminSettings(models.Model):
     workers_group_fee_per_bag = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Workers Group Fee Per Bag", default=0)
     mill_fee_per_bag = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Mill Fee Per Bag", default=0)
 
+    def __str__(self):
+        return "Admin custom modifications"
+        
 class AdminDashboard(AdminSettings):
     class Meta:
         proxy = True

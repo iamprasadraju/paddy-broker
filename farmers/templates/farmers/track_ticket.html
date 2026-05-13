@@ -1,12 +1,103 @@
 {% extends 'farmers/layout.html' %}
+{% block title %}Vari Mitra — Track Ticket{% endblock %}
+
 {% block content %}
-    <p>{{ farmer.farmer_name }}</p>
-    <p>{{ farmer.mobile_num }}</p>
-    <p>{{ farmer.location }}</p>
-    <p>{{ farmer.tracking_id }}</p>
-    <p>{{ farmer.status }}</p>
-    <p>{{ consignment.num_bags }}</p>
-    <p>{{ consignment.govt_rate }}</p>
-    <p>{{ consignment.brokerage_per_bag }}</p>
-    <p>{{ consignment.total_brokerage }}</p>
+<div class="mb-4">
+    <a href="/" class="text-sm text-earth-secondary hover:underline">&larr; Back to Home</a>
+</div>
+
+<div class="max-w-2xl mx-auto">
+    <div class="border border-earth-border mb-4">
+        <div class="bg-earth-accent/20 px-4 py-2 border-b border-earth-border">
+            <h1 class="font-bold text-earth-text">{{ farmer.farmer_name }}</h1>
+            <p class="text-xs text-gray-600">Tracking ID: <span class="font-mono font-medium text-earth-primary">{{ farmer.tracking_id }}</span></p>
+        </div>
+        <div class="p-4">
+            <table class="w-full text-sm">
+                <tbody>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500 w-32">Mobile</td>
+                    <td class="py-1.5 font-medium">{{ farmer.mobile_num }}</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Location</td>
+                    <td class="py-1.5 font-medium">{{ farmer.location }}</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Paddy Variety</td>
+                    <td class="py-1.5 font-medium">{{ farmer.paddy_variety }}</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Moisture</td>
+                    <td class="py-1.5 font-medium">{{ farmer.moisture }}%</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Date Measured</td>
+                    <td class="py-1.5 font-medium">{{ farmer.date_moisture_measured|date:"d M Y" }}</td>
+                </tr>
+                <tr>
+                    <td class="py-1.5 text-gray-500">Status</td>
+                    <td class="py-1.5">{% include 'farmers/_status_badge.html' with status=farmer.status %}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="border border-earth-border mb-4">
+        <div class="bg-earth-accent/20 px-4 py-2 border-b border-earth-border">
+            <h2 class="font-bold text-earth-text text-sm">Journey Status</h2>
+        </div>
+        <div class="p-4">
+            <p class="text-sm">
+                Current Status: <span class="font-bold text-earth-secondary">{{ farmer.status }}</span>
+            </p>
+            <ul class="mt-3 text-xs text-gray-600 space-y-1">
+                <li{% if farmer.status == "Ticket Booked" %} class="font-medium text-earth-primary"{% endif %}>1. Ticket Booked</li>
+                <li{% if farmer.status == "Ongoing" %} class="font-medium text-earth-primary"{% endif %}>2. Ongoing</li>
+                <li{% if farmer.status == "Packed" %} class="font-medium text-earth-primary"{% endif %}>3. Packed</li>
+                <li{% if farmer.status == "Picked" %} class="font-medium text-earth-primary"{% endif %}>4. Picked</li>
+                <li{% if farmer.status == "Transported" %} class="font-medium text-earth-primary"{% endif %}>5. Transported</li>
+            </ul>
+        </div>
+    </div>
+
+    {% if consignment %}
+    <div class="border border-earth-border">
+        <div class="bg-earth-accent/20 px-4 py-2 border-b border-earth-border">
+            <h2 class="font-bold text-earth-text text-sm">Consignment Details</h2>
+        </div>
+        <div class="p-4">
+            <table class="w-full text-sm">
+                <tbody>
+                {% if consignment.num_bags %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500 w-32">Bags (40kg)</td>
+                    <td class="py-1.5 font-medium">{{ consignment.num_bags }}</td>
+                </tr>
+                {% endif %}
+                {% if consignment.total_brokerage %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Total Brokerage</td>
+                    <td class="py-1.5 font-mono font-medium">₹{{ consignment.total_brokerage|floatformat:2 }}</td>
+                </tr>
+                {% endif %}
+                {% if consignment.vehicle %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Vehicle</td>
+                    <td class="py-1.5 font-medium">{{ consignment.vehicle.vehicle_number }}</td>
+                </tr>
+                {% endif %}
+                {% if consignment.workers_group %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Workers Group</td>
+                    <td class="py-1.5 font-medium">{{ consignment.workers_group.group_leader.name }}</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

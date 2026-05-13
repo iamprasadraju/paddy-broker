@@ -1,0 +1,13 @@
+{% if status == "Ticket Booked" %}
+    <span class="px-1.5 py-0.5 text-xs font-medium border border-blue-600 text-blue-700">{{ status }}</span>
+{% elif status == "Ongoing" %}
+    <span class="px-1.5 py-0.5 text-xs font-medium border border-amber-600 text-amber-700">{{ status }}</span>
+{% elif status == "Packed" %}
+    <span class="px-1.5 py-0.5 text-xs font-medium border border-purple-600 text-purple-700">{{ status }}</span>
+{% elif status == "Picked" %}
+    <span class="px-1.5 py-0.5 text-xs font-medium border border-orange-600 text-orange-700">{{ status }}</span>
+{% elif status == "Transported" %}
+    <span class="px-1.5 py-0.5 text-xs font-medium border border-emerald-600 text-emerald-700">{{ status }}</span>
+{% else %}
+    <span class="px-1.5 py-0.5 text-xs font-medium border border-gray-400 text-gray-600">{{ status }}</span>
+{% endif %}
