@@ -44,7 +44,7 @@ class FarmerTicket(models.Model):
 
 class FarmerConsignmentInfo(models.Model):
     # One-to-one relationship with FarmerTicket
-    tracking_id = models.OneToOneField(FarmerTicket, on_delete=models.CASCADE, limit_choices_to={'status': FarmerTicket.Status.PACKED})
+    tracking_id = models.OneToOneField(FarmerTicket, on_delete=models.CASCADE, limit_choices_to={'status': FarmerTicket.Status.ONGOING})
     num_bags = models.IntegerField(verbose_name="Number of bags (40 kg)")
     workers_group = models.ForeignKey('WorkersGroup', on_delete=models.CASCADE, verbose_name="Workers Group", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

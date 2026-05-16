@@ -1,13 +1,49 @@
 {% if status == "Ticket Booked" %}
-    <span class="px-1.5 py-0.5 text-xs font-medium border border-blue-600 text-blue-700">{{ status }}</span>
+    <div class="circle-stamp terracotta">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">TICKET<br>BOOKED</span>
+            </div>
+        </div>
+    </div>
 {% elif status == "Ongoing" %}
-    <span class="px-1.5 py-0.5 text-xs font-medium border border-amber-600 text-amber-700">{{ status }}</span>
+    <div class="circle-stamp amber">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">ON<br>GOING</span>
+            </div>
+        </div>
+    </div>
 {% elif status == "Packed" %}
-    <span class="px-1.5 py-0.5 text-xs font-medium border border-purple-600 text-purple-700">{{ status }}</span>
+    <div class="circle-stamp brown">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">PACKED</span>
+            </div>
+        </div>
+    </div>
 {% elif status == "Picked" %}
-    <span class="px-1.5 py-0.5 text-xs font-medium border border-orange-600 text-orange-700">{{ status }}</span>
+    <div class="circle-stamp olive">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">PICKED</span>
+            </div>
+        </div>
+    </div>
 {% elif status == "Transported" %}
-    <span class="px-1.5 py-0.5 text-xs font-medium border border-emerald-600 text-emerald-700">{{ status }}</span>
+    <div class="circle-stamp emerald">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">TRANS<br>PORTED</span>
+            </div>
+        </div>
+    </div>
 {% else %}
-    <span class="px-1.5 py-0.5 text-xs font-medium border border-gray-400 text-gray-600">{{ status }}</span>
+    <div class="circle-stamp" style="--stamp-color: #6B7280;">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">{{ status }}</span>
+            </div>
+        </div>
+    </div>
 {% endif %}

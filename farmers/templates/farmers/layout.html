@@ -16,7 +16,12 @@
                             primary: '#8B4513',
                             secondary: '#556B2F',
                             accent: '#C4A77D',
-                        }
+                        },
+                        terracotta: '#8B4513',
+                        amber: '#DAA520',
+                        brown: '#8B7355',
+                        olive: '#556B2F',
+                        emerald: '#228B22',
                     },
                     fontFamily: { telugu: ['Noto Sans Telugu', 'sans-serif'] },
                     borderRadius: { DEFAULT: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px', '2xl': '0px' },
@@ -30,6 +35,45 @@
         body { background-color: #FAF8F5; color: #2D2A26; }
         * { border-radius: 0 !important; box-shadow: none !important; }
         input, button, select, textarea { border-radius: 0 !important; }
+        /* Circular rubber stamp with visible text */
+        .circle-stamp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .circle-stamp .outer-ring {
+            width: 72px;
+            height: 72px;
+            border-radius: 50% !important;
+            border: 3px solid var(--stamp-color) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .circle-stamp .inner-ring {
+            width: 62px;
+            height: 62px;
+            border-radius: 50% !important;
+            border: 1.5px dashed var(--stamp-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: color-mix(in srgb, var(--stamp-color) 8%, transparent);
+        }
+        .circle-stamp .stamp-text {
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--stamp-color);
+            text-align: center;
+            line-height: 1.2;
+        }
+        .circle-stamp.terracotta { --stamp-color: #8B4513; }
+        .circle-stamp.amber     { --stamp-color: #DAA520; }
+        .circle-stamp.brown     { --stamp-color: #8B7355; }
+        .circle-stamp.olive     { --stamp-color: #556B2F; }
+        .circle-stamp.emerald   { --stamp-color: #228B22; }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
