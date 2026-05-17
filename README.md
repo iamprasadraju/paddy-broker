@@ -1,1 +1,1 @@
-<img src="vari-mitra.png">
+<img width="20%" src="vari-mitra.png">
