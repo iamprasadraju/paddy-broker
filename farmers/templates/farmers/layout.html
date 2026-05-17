@@ -123,8 +123,8 @@
                     <img src="{% static 'vari-mitra.png' %}" alt="Vari Mitra" class="h-16 w-auto object-contain" style="filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 2px 6px rgba(0,0,0,0.4));">
                 </a>
                 <div class="w-1/3 flex items-center justify-end gap-6 text-base font-medium">
-                    <a href="/" class="hover:text-earth-accent transition-colors">Home</a>
-                    <a href="{% url 'book_ticket' %}" class="hover:text-earth-accent transition-colors">Book Ticket</a>
+                    <a href="/" class="hidden md:inline-block hover:text-earth-accent transition-colors">Home</a>
+                    <a href="{% url 'book_ticket' %}" class="hidden md:inline-block hover:text-earth-accent transition-colors">Book Ticket</a>
                     <button id="menu-btn" class="md:hidden p-2 border border-white rounded" aria-label="Toggle menu">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
