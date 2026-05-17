@@ -100,27 +100,17 @@
             pointer-events: none;
             z-index: 0;
         }
-        .logo-frame {
-            width: 72px;
-            height: 72px;
-            border-radius: 50% !important;
-            background: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body class="font-telugu min-h-screen flex flex-col">
     <img src="{% static 'vari-mitra.png' %}" alt="" class="page-watermark">
 <nav class="bg-earth-primary text-white border-b-4 border-earth-secondary relative z-10">
-        <div class="max-w-7xl mx-auto px-4 py-4">
+        <div class="max-w-7xl mx-auto px-4 py-2">
             <div class="flex items-center justify-between w-full">
                 <a href="/" class="text-3xl font-bold tracking-wide w-1/3">వరి మిత్ర</a>
                 <a href="/" class="w-1/3 flex items-center justify-center">
-                    <img src="{% static 'vari-mitra.png' %}" alt="Vari Mitra" class="h-16 w-auto object-contain" style="filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 2px 6px rgba(0,0,0,0.4));">
+                    <img src="{% static 'vari-mitra.png' %}" alt="Vari Mitra" class="h-20 w-auto object-contain -mt-2" style="filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 2px 6px rgba(0,0,0,0.4));">
                 </a>
                 <div class="w-1/3 flex items-center justify-end gap-6 text-base font-medium">
                     <a href="/" class="hidden md:inline-block hover:text-earth-accent transition-colors">Home</a>
