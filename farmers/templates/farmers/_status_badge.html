@@ -1,0 +1,49 @@
+{% if status == "Ticket Booked" %}
+    <div class="circle-stamp terracotta">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">TICKET<br>BOOKED</span>
+            </div>
+        </div>
+    </div>
+{% elif status == "Ongoing" %}
+    <div class="circle-stamp amber">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">ON<br>GOING</span>
+            </div>
+        </div>
+    </div>
+{% elif status == "Packed" %}
+    <div class="circle-stamp brown">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">PACKED</span>
+            </div>
+        </div>
+    </div>
+{% elif status == "Picked" %}
+    <div class="circle-stamp olive">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">PICKED</span>
+            </div>
+        </div>
+    </div>
+{% elif status == "Transported" %}
+    <div class="circle-stamp emerald">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">TRANS<br>PORTED</span>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="circle-stamp" style="--stamp-color: #6B7280;">
+        <div class="outer-ring">
+            <div class="inner-ring">
+                <span class="stamp-text">{{ status }}</span>
+            </div>
+        </div>
+    </div>
+{% endif %}

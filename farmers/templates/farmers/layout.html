@@ -1,19 +1,158 @@
+{% load static %}
 <html>
 <head>
-    <title>paddy broker</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@100..900&display=swap');
-        body {
-            font-family: 'Noto Sans Telugu', sans-serif;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vari Mitra — Paddy Broker{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        earth: {
+                            bg: '#FAF8F5',
+                            text: '#2D2A26',
+                            border: '#D4C5B5',
+                            primary: '#556B2F',
+                            secondary: '#3D4F1F',
+                            accent: '#8BA84A',
+                        },
+                        terracotta: '#8B4513',
+                        amber: '#DAA520',
+                        brown: '#8B7355',
+                        olive: '#556B2F',
+                        emerald: '#228B22',
+                    },
+                    fontFamily: { telugu: ['Noto Sans Telugu', 'sans-serif'] },
+                    borderRadius: { DEFAULT: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px', '2xl': '0px' },
+                    boxShadow: { DEFAULT: 'none', sm: 'none', md: 'none', lg: 'none', xl: 'none' }
+                }
+            }
         }
-        table, th, td { border: 1px solid black; border-collapse: collapse; }
-        
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #FAF8F5; color: #2D2A26; }
+        * { border-radius: 0 !important; box-shadow: none !important; }
+        input, button, select, textarea { border-radius: 0 !important; }
+        /* Circular rubber stamp with visible text */
+        .circle-stamp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .circle-stamp .outer-ring {
+            width: 72px;
+            height: 72px;
+            border-radius: 50% !important;
+            border: 3px solid var(--stamp-color) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .circle-stamp .inner-ring {
+            width: 62px;
+            height: 62px;
+            border-radius: 50% !important;
+            border: 1.5px dashed var(--stamp-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: color-mix(in srgb, var(--stamp-color) 8%, transparent);
+        }
+        .circle-stamp .stamp-text {
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--stamp-color);
+            text-align: center;
+            line-height: 1.2;
+        }
+        .circle-stamp.terracotta { --stamp-color: #8B4513; }
+        .circle-stamp.amber     { --stamp-color: #DAA520; }
+        .circle-stamp.brown     { --stamp-color: #8B7355; }
+        .circle-stamp.olive     { --stamp-color: #556B2F; }
+        .circle-stamp.emerald   { --stamp-color: #228B22; }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50% !important;
+            animation: blink 1.2s ease-in-out infinite;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        .page-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .logo-frame {
+            width: 72px;
+            height: 72px;
+            border-radius: 50% !important;
+            background: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body>
-     <h1 style="color: green; position: fixed; top: 0; left: 30px;">వరి మిత్ర 🌾</h1>
-    
-    {% block content %}
-    {% endblock %}
+<body class="font-telugu min-h-screen flex flex-col">
+    <img src="{% static 'vari-mitra.png' %}" alt="" class="page-watermark">
+<nav class="bg-earth-primary text-white border-b-4 border-earth-secondary relative z-10">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between w-full">
+                <a href="/" class="text-3xl font-bold tracking-wide w-1/3">వరి మిత్ర</a>
+                <a href="/" class="w-1/3 flex items-center justify-center">
+                    <img src="{% static 'vari-mitra.png' %}" alt="Vari Mitra" class="h-16 w-auto object-contain" style="filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 2px 6px rgba(0,0,0,0.4));">
+                </a>
+                <div class="w-1/3 flex items-center justify-end gap-6 text-base font-medium">
+                    <a href="/" class="hidden md:inline-block hover:text-earth-accent transition-colors">Home</a>
+                    <a href="{% url 'book_ticket' %}" class="hidden md:inline-block hover:text-earth-accent transition-colors">Book Ticket</a>
+                    <button id="menu-btn" class="md:hidden p-2 border border-white rounded" aria-label="Toggle menu">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-earth-primary border-t border-white/20">
+            <div class="px-4 py-3">
+                <div class="space-y-2">
+                    <a href="/" class="block px-3 py-2 hover:bg-earth-secondary rounded">Home</a>
+                    <a href="{% url 'book_ticket' %}" class="block px-3 py-2 hover:bg-earth-secondary rounded">Book Ticket</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full relative z-10">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-earth-primary text-white text-center py-3 text-xs md:text-sm border-t-4 border-earth-secondary relative z-10">
+        <p>&copy; 2026 Vari Mitra — Developed by Prasad Raju</p>
+    </footer>
+
+    <script>
+        document.getElementById('menu-btn')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

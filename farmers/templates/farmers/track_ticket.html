@@ -1,12 +1,164 @@
 {% extends 'farmers/layout.html' %}
+{% block title %}Vari Mitra — Track Ticket{% endblock %}
+
 {% block content %}
-    <p>{{ farmer.farmer_name }}</p>
-    <p>{{ farmer.mobile_num }}</p>
-    <p>{{ farmer.location }}</p>
-    <p>{{ farmer.tracking_id }}</p>
-    <p>{{ farmer.status }}</p>
-    <p>{{ consignment.num_bags }}</p>
-    <p>{{ consignment.govt_rate }}</p>
-    <p>{{ consignment.brokerage_per_bag }}</p>
-    <p>{{ consignment.total_brokerage }}</p>
+<div class="mb-4">
+    <a href="/" class="text-sm text-earth-secondary hover:underline">&larr; Back to Home</a>
+</div>
+
+<div class="max-w-2xl mx-auto">
+    <div class="border border-earth-border mb-4">
+        <div class="bg-earth-accent/20 px-4 py-2 border-b border-earth-border">
+            <h1 class="font-bold text-earth-text">{{ farmer.farmer_name }}</h1>
+            <p class="text-xs text-gray-600">Tracking ID: <span class="font-mono font-medium text-earth-primary">{{ farmer.tracking_id }}</span></p>
+        </div>
+        <div class="p-4">
+            <table class="w-full text-sm">
+                <tbody>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500 w-32">Mobile</td>
+                    <td class="py-1.5 font-medium">{{ farmer.mobile_num }}</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Location</td>
+                    <td class="py-1.5 font-medium">{{ farmer.location }}</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Paddy Variety</td>
+                    <td class="py-1.5 font-medium">{{ farmer.paddy_variety }}</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Moisture</td>
+                    <td class="py-1.5 font-medium">{{ farmer.moisture }}%</td>
+                </tr>
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Date Measured</td>
+                    <td class="py-1.5 font-medium">{{ farmer.date_moisture_measured|date:"d M Y" }}</td>
+                </tr>
+                <tr>
+                    <td class="py-1.5 text-gray-500">Status</td>
+                    <td class="py-1.5">{% include 'farmers/_status_badge.html' with status=farmer.status %}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="border border-earth-border mb-4">
+        <div class="bg-earth-accent/20 px-4 py-2 border-b border-earth-border">
+            <h2 class="font-bold text-earth-text text-sm">Journey Status</h2>
+        </div>
+        <div class="p-4">
+            <!-- Progress bar -->
+            <div class="relative h-1 bg-earth-border mb-8">
+                {% with status=farmer.status %}
+                {% if status == "Ticket Booked" %}<div class="absolute h-full bg-earth-secondary" style="width: 20%"></div>{% endif %}
+                {% if status == "Ongoing" %}<div class="absolute h-full bg-earth-secondary" style="width: 40%"></div>{% endif %}
+                {% if status == "Packed" %}<div class="absolute h-full bg-earth-secondary" style="width: 60%"></div>{% endif %}
+                {% if status == "Picked" %}<div class="absolute h-full bg-earth-secondary" style="width: 80%"></div>{% endif %}
+                {% if status == "Transported" %}<div class="absolute h-full bg-earth-secondary" style="width: 100%"></div>{% endif %}
+                {% endwith %}
+            </div>
+            
+            <!-- Timeline steps -->
+            <div class="relative flex justify-between">
+                <!-- Step 1: Ticket Booked -->
+                <div class="flex flex-col items-center">
+                    {% if farmer.status == "Ticket Booked" or farmer.status == "Ongoing" or farmer.status == "Packed" or farmer.status == "Picked" or farmer.status == "Transported" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">✓</div>
+                    {% else %}
+                        <div class="w-6 h-6 rounded-full bg-earth-border text-earth-text flex items-center justify-center text-xs font-bold mb-2">1</div>
+                    {% endif %}
+                    <p class="text-xs font-medium {% if farmer.status == "Ticket Booked" %}text-earth-secondary{% else %}text-earth-text{% endif %}">Ticket Booked</p>
+                </div>
+                
+                <!-- Step 2: Ongoing -->
+                <div class="flex flex-col items-center">
+                    {% if farmer.status == "Ongoing" or farmer.status == "Packed" or farmer.status == "Picked" or farmer.status == "Transported" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">✓</div>
+                    {% elif farmer.status == "Ongoing" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">2</div>
+                    {% else %}
+                        <div class="w-6 h-6 rounded-full bg-earth-border text-earth-text flex items-center justify-center text-xs font-bold mb-2">2</div>
+                    {% endif %}
+                    <p class="text-xs font-medium {% if farmer.status == "Ongoing" %}text-earth-secondary{% else %}text-earth-text{% endif %}">Ongoing</p>
+                </div>
+                
+                <!-- Step 3: Packed -->
+                <div class="flex flex-col items-center">
+                    {% if farmer.status == "Packed" or farmer.status == "Picked" or farmer.status == "Transported" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">✓</div>
+                    {% elif farmer.status == "Packed" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">3</div>
+                    {% else %}
+                        <div class="w-6 h-6 rounded-full bg-earth-border text-earth-text flex items-center justify-center text-xs font-bold mb-2">3</div>
+                    {% endif %}
+                    <p class="text-xs font-medium {% if farmer.status == "Packed" %}text-earth-secondary{% else %}text-earth-text{% endif %}">Packed</p>
+                </div>
+                
+                <!-- Step 4: Picked -->
+                <div class="flex flex-col items-center">
+                    {% if farmer.status == "Picked" or farmer.status == "Transported" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">✓</div>
+                    {% elif farmer.status == "Picked" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">4</div>
+                    {% else %}
+                        <div class="w-6 h-6 rounded-full bg-earth-border text-earth-text flex items-center justify-center text-xs font-bold mb-2">4</div>
+                    {% endif %}
+                    <p class="text-xs font-medium {% if farmer.status == "Picked" %}text-earth-secondary{% else %}text-earth-text{% endif %}">Picked</p>
+                </div>
+                
+                <!-- Step 5: Transported -->
+                <div class="flex flex-col items-center">
+                    {% if farmer.status == "Transported" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">✓</div>
+                    {% elif farmer.status == "Transported" %}
+                        <div class="w-6 h-6 rounded-full bg-earth-secondary text-white flex items-center justify-center text-xs font-bold mb-2">5</div>
+                    {% else %}
+                        <div class="w-6 h-6 rounded-full bg-earth-border text-earth-text flex items-center justify-center text-xs font-bold mb-2">5</div>
+                    {% endif %}
+                    <p class="text-xs font-medium {% if farmer.status == "Transported" %}text-earth-secondary{% else %}text-earth-text{% endif %}">Transported</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if consignment %}
+    <div class="border border-earth-border">
+        <div class="bg-earth-accent/20 px-4 py-2 border-b border-earth-border">
+            <h2 class="font-bold text-earth-text text-sm">Consignment Details</h2>
+        </div>
+        <div class="p-4">
+            <table class="w-full text-sm">
+                <tbody>
+                {% if consignment.num_bags %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500 w-32">Bags (40kg)</td>
+                    <td class="py-1.5 font-medium">{{ consignment.num_bags }}</td>
+                </tr>
+                {% endif %}
+                {% if consignment.total_brokerage %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Total Brokerage</td>
+                    <td class="py-1.5 font-mono font-medium">₹{{ consignment.total_brokerage|floatformat:2 }}</td>
+                </tr>
+                {% endif %}
+                {% if consignment.vehicle %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Vehicle</td>
+                    <td class="py-1.5 font-medium">{{ consignment.vehicle.vehicle_number }}</td>
+                </tr>
+                {% endif %}
+                {% if consignment.workers_group %}
+                <tr class="border-b border-earth-border">
+                    <td class="py-1.5 text-gray-500">Workers Group</td>
+                    <td class="py-1.5 font-medium">{{ consignment.workers_group.group_leader.name }}</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

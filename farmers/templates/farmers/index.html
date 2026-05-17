@@ -1,60 +1,125 @@
 {% extends 'farmers/layout.html' %}
+{% block title %}Vari Mitra — Home{% endblock %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="ticket_id" placeholder="Track your ticket">
-    <button type="submit">Track</button>
-</form>
-<a href="{% url 'book_ticket' %}">Book Ticket</a>
 
-<h2 style="text-align: center; margin-bottom: 20px;">Prority list of Farmers</h2>
-<table>
-    {% if pending_farmers %}
-    <tr>
-        {% for col_name in farmer_metadata %}
-        <th>{{ col_name }}</th>
-        {% endfor %}
-    </tr>
-    {% for farmer in pending_farmers %}
-    <tr>
-        <td>{{ farmer.priority }}</td>
-        <td>{{ farmer.tracking_id }}</td>
-        <td>{{ farmer.farmer_name }}</td>
-        <td>{{ farmer.mobile_num }}</td>
-        <td>{{ farmer.aadhar_num }}</td>
-        <td>{{ farmer.location }}</td>
-        <td>{{ farmer.paddy_variety }}</td>
-        <td>{{ farmer.moisture }}</td>
-        <td>{{ farmer.date_moisture_measured }}</td>
-        <td>{{ farmer.created_at }}</td>
-        <td>{{ farmer.status }}</td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
-<h2 style="text-align: center; margin-bottom: 20px;">Happy Farmers</h2>
-<table>
-    {% if happy_farmers %}
-    <tr>
-        {% for col_name in farmer_metadata %}
-        <th>{{ col_name }}</th>
-        {% endfor %}
-    </tr>
-    {% for farmer in happy_farmers %}
-    <tr>
-        <td>{{ farmer.priority }}</td>
-        <td>{{ farmer.tracking_id }}</td>
-        <td>{{ farmer.farmer_name }}</td>
-        <td>{{ farmer.aadhar_num }}</td>
-        <td>{{ farmer.mobile_num }}</td>
-        <td>{{ farmer.location }}</td>
-        <td>{{ farmer.paddy_variety }}</td>
-        <td>{{ farmer.moisture }}</td>
-        <td>{{ farmer.date_moisture_measured }}</td>
-        <td>{{ farmer.status }}</td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+<section class="bg-earth-primary text-white mb-6 border-b-4 border-earth-secondary">
+    <div class="px-4 py-2">
+        <a href="{% url 'book_ticket' %}" class="w-full inline-flex justify-center px-4 py-2 text-sm font-medium border border-white/40 text-white mb-3 hover:bg-white/10 transition-colors">
+            + Book New Ticket
+        </a>
+        <p class="text-earth-accent text-sm mb-2">Track your paddy tickets, check live rates, and manage consignments.</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <form method="post" class="flex-1">
+                {% csrf_token %}
+                <div class="flex gap-2">
+                    <input type="text" name="ticket_id" placeholder="Tracking ID" required
+                           class="flex-1 min-w-0 px-3 py-1.5 text-earth-text text-sm font-mono border border-white/30 focus:border-earth-accent focus:outline-none bg-white">
+                    <button type="submit" class="px-4 py-1.5 bg-earth-secondary text-white font-medium text-sm border border-white">
+                        Track
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="mb-6">
+    <h2 class="text-lg font-bold text-earth-primary border-b-2 border-earth-border pb-1 mb-3"><span class="live-dot"></span>Live Paddy Rates</h2>
+    <div class="overflow-x-auto border border-earth-border">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-earth-accent/20 text-earth-text uppercase text-xs tracking-wider">
+                    <th class="px-4 py-2 text-left font-semibold border-b border-earth-border">Grade</th>
+                    <th class="px-4 py-2 text-left font-semibold border-b border-earth-border">Rate (per 75kg)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paddy in paddy_data %}
+                <tr class="{% cycle '' 'bg-earth-bg/50' %}">
+                    <td class="px-4 py-2 border-b border-earth-border font-medium">{{ paddy.paddy_variety }}</td>
+                    <td class="px-4 py-2 border-b border-earth-border font-mono">₹{{ paddy.paddy_rate }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2" class="px-4 py-4 text-center text-gray-500 border-b border-earth-border">No paddy rates available. Add in admin.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="mb-6">
+    <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-bold text-earth-primary border-b-2 border-earth-border pb-1">Pending Farmers</h2>
+        <span class="text-xs font-medium px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-300">{{ pending_farmers|length }} pending</span>
+    </div>
+    <div class="overflow-x-auto border border-earth-border">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-earth-accent/20 text-earth-text uppercase text-xs tracking-wider">
+                    {% for col_name in farmer_metadata %}
+                    <th class="px-3 py-2 text-left font-semibold border-b border-earth-border">{{ col_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for farmer in pending_farmers %}
+                <tr class="{% cycle '' 'bg-earth-bg/50' %} hover:bg-earth-accent/10">
+                    <td class="px-3 py-2 border-b border-earth-border font-mono text-xs">{{ farmer.priority }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border font-mono text-xs text-earth-primary font-medium">{{ farmer.tracking_id }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.farmer_name }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.mobile_num }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border font-mono text-xs">{{ farmer.aadhar_num }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.location }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.paddy_variety }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.moisture }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border text-xs">{{ farmer.date_moisture_measured|date:"d M Y" }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border text-xs">{{ farmer.created_at|date:"d M Y H:i" }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{% include 'farmers/_status_badge.html' with status=farmer.status %}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="11" class="px-3 py-4 text-center text-gray-500 border-b border-earth-border">No pending farmers.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="mb-6">
+    <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-bold text-earth-primary border-b-2 border-earth-border pb-1">Happy Farmers</h2>
+        <span class="text-xs font-medium px-2 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300">{{ happy_farmers|length }} transported</span>
+    </div>
+    <div class="overflow-x-auto border border-earth-border">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-earth-accent/20 text-earth-text uppercase text-xs tracking-wider">
+                    {% for col_name in farmer_metadata %}
+                    <th class="px-3 py-2 text-left font-semibold border-b border-earth-border">{{ col_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for farmer in happy_farmers %}
+                <tr class="{% cycle '' 'bg-earth-bg/50' %} hover:bg-earth-accent/10">
+                    <td class="px-3 py-2 border-b border-earth-border font-mono text-xs">{{ farmer.priority }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border font-mono text-xs text-earth-primary font-medium">{{ farmer.tracking_id }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.farmer_name }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.mobile_num }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border font-mono text-xs">{{ farmer.aadhar_num }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.location }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.paddy_variety }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{{ farmer.moisture }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border text-xs">{{ farmer.date_moisture_measured|date:"d M Y" }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border text-xs">{{ farmer.created_at|date:"d M Y H:i" }}</td>
+                    <td class="px-3 py-2 border-b border-earth-border">{% include 'farmers/_status_badge.html' with status=farmer.status %}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="11" class="px-3 py-4 text-center text-gray-500 border-b border-earth-border">No transported farmers yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
 {% endblock %}
